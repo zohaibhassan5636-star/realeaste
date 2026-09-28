@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Listings — Meridian Estates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<header class="site">
+  <div class="container site-nav">
+    <a href="index.html" class="site-logo"><span class="mark">M</span>Meridian Estates</a>
+    <nav class="site-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="listings.html?type=house">Houses</a>
+      <a href="listings.html?type=plot">Plots</a>
+    </nav>
+    <a href="listings.html" class="nav-cta">Browse listings</a>
+  </div>
+</header>
+
+<section class="section" style="padding-top:36px;">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2 id="results-title">All listings</h2>
+        <p id="results-sub">Loading…</p>
+      </div>
+    </div>
+
+    <div class="listings-layout">
+      <aside class="filters">
+        <h3>Filter</h3>
+        <form id="filter-form">
+          <div class="filter-group">
+            <label>Type</label>
+            <select name="type">
+              <option value="">Any type</option>
+              <option value="house">House</option>
+              <option value="apartment">Apartment</option>
+              <option value="plot">Plot</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Buy or rent</label>
+            <select name="listing">
+              <option value="">Either</option>
+              <option value="sale">For sale</option>
+              <option value="rent">For rent</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Location</label>
+            <input type="text" name="location" placeholder="e.g. DHA, Gulberg">
+          </div>
+          <div class="filter-group">
+            <label>Max budget (PKR)</label>
+            <input type="number" name="maxPrice" placeholder="e.g. 40000000">
+          </div>
+          <div class="filter-group">
+            <label>Min bedrooms</label>
+            <select name="bedrooms">
+              <option value="">Any</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+              <option value="5">5+</option>
+            </select>
+          </div>
+          <button type="submit" class="filter-apply">Apply filters</button>
+        </form>
+      </aside>
+
+      <div id="results-grid" class="grid"><div class="loading">Loading listings…</div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="site-logo"><span class="mark">M</span>Meridian Estates</div>
+        <p>Helping Lahore families and investors find the right property since 2017.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="listings.html">All listings</a>
+        <a href="listings.html?type=house">Houses</a>
+        <a href="listings.html?type=apartment">Apartments</a>
+        <a href="listings.html?type=plot">Plots</a>
+      </div>
+      <div>
+        <h4>Areas</h4>
+        <a href="listings.html?location=DHA">DHA</a>
+        <a href="listings.html?location=Gulberg">Gulberg</a>
+        <a href="listings.html?location=Bahria">Bahria Town</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Meridian Estates. All listings verified.</div>
+      <div>Lahore, Pakistan</div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  const form = document.getElementById('filter-form');
+  const params = new URLSearchParams(window.location.search);
+  ['type', 'listing', 'location', 'maxPrice', 'bedrooms'].forEach(function (k) {
+    if (params.get(k) && form.elements[k]) form.elements[k].value = params.get(k);
+  });
+
+  function currentFilters() {
+    const fd = new FormData(form);
+    const f = {};
+    for (const [k, v] of fd.entries()) if (v) f[k] = v;
+    if (f.maxPrice) f.maxPrice = Number(f.maxPrice);
+    if (f.bedrooms) f.bedrooms = Number(f.bedrooms);
+    return f;
+  }
+
+  async function runSearch() {
+    const grid = document.getElementById('results-grid');
+    const sub = document.getElementById('results-sub');
+    grid.innerHTML = '<div class="loading">Loading listings…</div>';
+    try {
+      const rows = await fetchProperties(currentFilters());
+      sub.textContent = rows.length + (rows.length === 1 ? ' listing found' : ' listings found');
+      grid.innerHTML = rows.length ? rows.map(propertyCard).join('') :
+        '<div class="empty"><div class="title">No matches</div><div>Try widening your filters.</div></div>';
+    } catch (err) {
+      grid.innerHTML = '<div class="empty"><div class="title">Could not load listings</div><div>' + esc(err.message) + '</div></div>';
+    }
+  }
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); runSearch(); });
+  runSearch();
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Property — Meridian Estates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<header class="site">
+  <div class="container site-nav">
+    <a href="index.html" class="site-logo"><span class="mark">M</span>Meridian Estates</a>
+    <nav class="site-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="listings.html?type=house">Houses</a>
+      <a href="listings.html?type=plot">Plots</a>
+    </nav>
+    <a href="listings.html" class="nav-cta">Browse listings</a>
+  </div>
+</header>
+
+<section class="section" style="padding-top:32px;">
+  <div class="container" id="page-content">
+    <div class="loading">Loading property…</div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="site-logo"><span class="mark">M</span>Meridian Estates</div>
+        <p>Helping Lahore families and investors find the right property since 2017.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="listings.html">All listings</a>
+        <a href="listings.html?type=house">Houses</a>
+        <a href="listings.html?type=apartment">Apartments</a>
+        <a href="listings.html?type=plot">Plots</a>
+      </div>
+      <div>
+        <h4>Areas</h4>
+        <a href="listings.html?location=DHA">DHA</a>
+        <a href="listings.html?location=Gulberg">Gulberg</a>
+        <a href="listings.html?location=Bahria">Bahria Town</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Meridian Estates. All listings verified.</div>
+      <div>Lahore, Pakistan</div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  const id = new URLSearchParams(window.location.search).get('id');
+  const content = document.getElementById('page-content');
+
+  function galleryHtml(images, title) {
+    const imgs = (images && images.length) ? images.slice(0, 3) : [placeholderPhoto];
+    const main = `<img class="main" src="${imgs[0]}" alt="${esc(title)}">`;
+    const thumbs = imgs.slice(1).map(function (src) { return `<img class="thumb" src="${src}" alt="${esc(title)}">`; }).join('');
+    return `<div class="detail-gallery">${main}${thumbs}</div>`;
+  }
+
+  function detailHtml(p) {
+    const bedsLine = [];
+    if (p.bedrooms != null) bedsLine.push({ n: p.bedrooms, l: 'Bedrooms' });
+    if (p.bathrooms != null) bedsLine.push({ n: p.bathrooms, l: 'Bathrooms' });
+    if (p.area_sqft != null) bedsLine.push({ n: p.area_sqft, l: 'Sqft' });
+
+    return `
+      ${galleryHtml(p.image_urls, p.title)}
+      <div class="detail-layout">
+        <div>
+          <h1 class="detail-title">${esc(p.title)}</h1>
+          <div class="detail-loc">${esc(p.location || '')}</div>
+          <div class="detail-price">${money(p.price)}${p.listing === 'rent' ? ' / month' : ''}</div>
+          ${bedsLine.length ? `<div class="stat-strip">${bedsLine.map(function (b) { return `<div><div class="n">${b.n}</div><div class="l">${b.l}</div></div>`; }).join('')}</div>` : ''}
+          <p class="detail-desc">${esc(p.description || 'Contact us for more details about this property.')}</p>
+        </div>
+
+        <div class="enquiry-card">
+          <h3>Interested in this property?</h3>
+          <p class="sub">Send us your details and we'll get back to you shortly.</p>
+          <div class="form-msg" id="form-msg"></div>
+          <form id="enquiry-form">
+            <div class="field"><label>Name</label><input name="name" required></div>
+            <div class="field"><label>Email</label><input name="email" type="email" required></div>
+            <div class="field"><label>Phone</label><input name="phone" type="tel"></div>
+            <div class="field"><label>Message</label><textarea name="message" rows="3">I'm interested in ${esc(p.title)} (${esc(p.location || '')}). Please share more details or arrange a viewing.</textarea></div>
+            <button type="submit" id="enquiry-submit">Send enquiry</button>
+          </form>
+        </div>
+      </div>`;
+  }
+
+  (async function load() {
+    if (!id) { content.innerHTML = '<div class="empty"><div class="title">No property specified</div><div><a href="listings.html">Browse all listings</a></div></div>'; return; }
+    try {
+      const p = await fetchProperty(id);
+      if (!p) { content.innerHTML = '<div class="empty"><div class="title">Property not found</div><div>It may have been sold or removed. <a href="listings.html">See other listings</a></div></div>'; return; }
+      content.innerHTML = detailHtml(p);
+
+      document.getElementById('enquiry-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const btn = document.getElementById('enquiry-submit');
+        const msg = document.getElementById('form-msg');
+        msg.classList.remove('show', 'success', 'error');
+        const fd = new FormData(e.target);
+
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+          await submitEnquiry({
+            name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'),
+            message: fd.get('message'), source: 'website',
+            property_type: p.type, location: p.location, budget_max: p.price
+          });
+          msg.textContent = 'Thanks! We received your enquiry and will be in touch shortly.';
+          msg.classList.add('show', 'success');
+          e.target.reset();
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.classList.add('show', 'error');
+        }
+        btn.disabled = false; btn.textContent = 'Send enquiry';
+      });
+    } catch (err) {
+      content.innerHTML = '<div class="empty"><div class="title">Could not load this property</div><div>' + esc(err.message) + '</div></div>';
+    }
+  })();
+</script>
+</body>
+</html>
