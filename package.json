@@ -1,0 +1,14 @@
+{
+  "name": "meridian-estates",
+  "version": "1.0.0",
+  "description": "Browse verified homes, apartments and plots across Lahore. Get matched to the right property, fast.",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node -e \"console.log('Build complete')\""
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

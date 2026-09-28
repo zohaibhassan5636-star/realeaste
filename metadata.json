@@ -1,0 +1,8 @@
+{
+  "name": "Meridian Estates",
+  "description": "Browse verified homes, apartments and plots across Lahore. Get matched to the right property, fast.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
