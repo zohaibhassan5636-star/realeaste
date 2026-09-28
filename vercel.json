@@ -1,0 +1,8 @@
+{
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/listings", "destination": "/listings.html" },
+    { "source": "/property", "destination": "/property.html" }
+  ]
+}

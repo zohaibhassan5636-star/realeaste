@@ -9,21 +9,24 @@ const app = express();
 const port = parseInt(process.env.PORT, 10) || 3000;
 const host = '0.0.0.0';
 
-// Serve static assets
+const publicDir = path.join(__dirname, 'public');
+
+// Serve static assets from public and root
+app.use(express.static(publicDir));
 app.use(express.static(__dirname));
 
 // Route handlers for clean URLs
 app.get('/listings', (req, res) => {
-  res.sendFile(path.join(__dirname, 'listings.html'));
+  res.sendFile(path.join(publicDir, 'listings.html'));
 });
 
 app.get('/property', (req, res) => {
-  res.sendFile(path.join(__dirname, 'property.html'));
+  res.sendFile(path.join(publicDir, 'property.html'));
 });
 
 // Fallback to index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(publicDir, 'index.html'));
 });
 
 app.listen(port, host, () => {

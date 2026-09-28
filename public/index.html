@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meridian Estates — Find your next home in Lahore</title>
+<meta name="description" content="Browse verified homes, apartments and plots across Lahore. Get matched to the right property, fast.">
+<meta property="og:title" content="Meridian Estates — Find your next home in Lahore">
+<meta property="og:description" content="Browse verified homes, apartments and plots across Lahore. Get matched to the right property, fast.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<header class="site">
+  <div class="container site-nav">
+    <a href="index.html" class="site-logo"><span class="mark">M</span>Meridian Estates</a>
+    <nav class="site-links">
+      <a href="index.html">Home</a>
+      <a href="listings.html">Listings</a>
+      <a href="listings.html?type=house">Houses</a>
+      <a href="listings.html?type=plot">Plots</a>
+    </nav>
+    <a href="listings.html" class="nav-cta">Browse listings</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="eyebrow">Lahore's trusted property partner</div>
+    <h1>Find a place that actually fits how you live.</h1>
+    <p>Verified listings, honest pricing, and a team that responds fast — usually within minutes, day or night.</p>
+
+    <form class="search-bar" id="hero-search">
+      <select name="type">
+        <option value="">Any type</option>
+        <option value="house">House</option>
+        <option value="apartment">Apartment</option>
+        <option value="plot">Plot</option>
+        <option value="commercial">Commercial</option>
+      </select>
+      <input type="text" name="location" placeholder="Location (e.g. DHA, Gulberg)">
+      <select name="listing">
+        <option value="">Buy or rent</option>
+        <option value="sale">For sale</option>
+        <option value="rent">For rent</option>
+      </select>
+      <button type="submit">Search properties</button>
+    </form>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="container stats-grid">
+    <div><div class="n">240+</div><div class="l">Properties listed</div></div>
+    <div><div class="n">1,800+</div><div class="l">Happy clients</div></div>
+    <div><div class="n">12</div><div class="l">Areas covered</div></div>
+    <div><div class="n">9 yrs</div><div class="l">In the Lahore market</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Handpicked for you</div>
+        <h2>Featured listings</h2>
+        <p>A few of our current favourites across Lahore's most in-demand neighbourhoods.</p>
+      </div>
+      <a href="listings.html" class="see-all">See all listings →</a>
+    </div>
+    <div id="featured-grid" class="grid"><div class="loading">Loading listings…</div></div>
+  </div>
+</section>
+
+<section class="section tint">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Why Meridian</div>
+        <h2>Real estate, done properly.</h2>
+      </div>
+    </div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="icon">✓</div>
+        <h3>Verified listings</h3>
+        <p>Every property is checked by our team before it goes live — no ghost listings, no stale prices.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">⚡</div>
+        <h3>Fast response</h3>
+        <p>Our team (and AI-assisted intake) means enquiries are answered in minutes, not days.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🤝</div>
+        <h3>Local expertise</h3>
+        <p>Agents who actually know DHA, Gulberg and Bahria Town block by block, not just on paper.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial">
+  <div class="container">
+    <p class="quote">"We messaged in the evening about a 3 bed in DHA and had three matching options — and a viewing booked — before the next morning. It didn't feel like dealing with an agency at all."</p>
+    <div class="who">Hina Farooq <span>· Bought a home in DHA Phase 6</span></div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container">
+    <h2>Not sure what you're looking for yet?</h2>
+    <p>Tell us your budget and area — our team will match you with the right options, no browsing required.</p>
+    <a href="listings.html" class="btn">Talk to us</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="site-logo"><span class="mark">M</span>Meridian Estates</div>
+        <p>Helping Lahore families and investors find the right property since 2017.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="listings.html">All listings</a>
+        <a href="listings.html?type=house">Houses</a>
+        <a href="listings.html?type=apartment">Apartments</a>
+        <a href="listings.html?type=plot">Plots</a>
+      </div>
+      <div>
+        <h4>Areas</h4>
+        <a href="listings.html?location=DHA">DHA</a>
+        <a href="listings.html?location=Gulberg">Gulberg</a>
+        <a href="listings.html?location=Bahria">Bahria Town</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Meridian Estates. All listings verified.</div>
+      <div>Lahore, Pakistan</div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  document.getElementById('hero-search').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const params = new URLSearchParams();
+    for (const [k, v] of fd.entries()) if (v) params.set(k, v);
+    window.location.href = 'listings.html?' + params.toString();
+  });
+
+  (async function loadFeatured() {
+    const grid = document.getElementById('featured-grid');
+    try {
+      const rows = await fetchProperties({ limit: 6 });
+      grid.innerHTML = rows.length ? rows.map(propertyCard).join('') : '<div class="empty"><div class="title">No listings yet</div><div>Check back soon.</div></div>';
+    } catch (err) {
+      grid.innerHTML = '<div class="empty"><div class="title">Could not load listings</div><div>' + esc(err.message) + '</div></div>';
+    }
+  })();
+</script>
+</body>
+</html>
